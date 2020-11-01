@@ -23,9 +23,11 @@ const deleteToDo = (id) => {
 const reducer = (state = [], action) => {
   switch (action.type) {
     case ADD_TODO:
-      return [...state, { text: action.text, id: Date.now() }];
+      const newToDoObj = { text: action.text, id: Date.now() };
+      return [...state, newToDoObj];
     case DELETE_TODO:
-      return [];
+      const cleaned = state.filter((toDo) => toDo.id !== action.id);
+      return cleaned;
     default:
       return state;
   }
@@ -40,13 +42,13 @@ const dispatchAddToDo = (text) => {
 };
 
 const dispatchDeleteToDo = (e) => {
-  const id = e.target.parentNode.id;
-  store.dipatch(deleteToDo(id));
+  const id = parseInt(e.target.parentNode.id);
+  store.dispatch(deleteToDo(id));
 };
 
 const paintToDos = () => {
   const toDos = store.getState();
-  ul.innerHTML("");
+  ul.innerHTML = "";
   toDos.forEach((toDo) => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
